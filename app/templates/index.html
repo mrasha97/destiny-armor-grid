@@ -39,8 +39,15 @@
 
         <div class="error-section" id="errorSection" style="display: none;">
             <div class="error-box">
-                <h3>Error</h3>
-                <p id="errorMessage"></p>
+                <span class="material-icons">error</span>
+                <div class="error-box-content">
+                    <h3>Error</h3>
+                    <p id="errorMessage"></p>
+                    <button class="btn btn-secondary" onclick="document.getElementById('errorSection').style.display='none'; document.getElementById('uploadSection').style.display='block';">
+                        <span class="material-icons">refresh</span>
+                        Try Again
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -67,21 +74,24 @@
                     </div>
                 </div>
                 <div class="tabs">
-                    <button class="tab-button active" data-tab="hunter">
+                    <button class="tab-button active" data-tab="hunter" aria-label="Hunter armor tab">
                         <span class="material-icons">person</span>
                         Hunter
+                        <span class="tab-badge" id="hunter-badge">0</span>
                     </button>
-                    <button class="tab-button" data-tab="warlock">
+                    <button class="tab-button" data-tab="warlock" aria-label="Warlock armor tab">
                         <span class="material-icons">auto_awesome</span>
                         Warlock
+                        <span class="tab-badge" id="warlock-badge">0</span>
                     </button>
-                    <button class="tab-button" data-tab="titan">
+                    <button class="tab-button" data-tab="titan" aria-label="Titan armor tab">
                         <span class="material-icons">shield</span>
                         Titan
+                        <span class="tab-badge" id="titan-badge">0</span>
                     </button>
                 </div>
 
-                <div class="tab-content active" id="hunter-tab">
+                <div class="tab-content active" id="hunter-tab" role="tabpanel" aria-labelledby="hunter-tab-button">
                     <div class="tab-info">
                         <p><strong>Total Pieces:</strong> <span id="hunter-count">0</span></p>
                     </div>
@@ -93,7 +103,7 @@
                     </div>
                 </div>
 
-                <div class="tab-content" id="warlock-tab">
+                <div class="tab-content" id="warlock-tab" role="tabpanel" aria-labelledby="warlock-tab-button">
                     <div class="tab-info">
                         <p><strong>Total Pieces:</strong> <span id="warlock-count">0</span></p>
                     </div>
@@ -105,7 +115,7 @@
                     </div>
                 </div>
 
-                <div class="tab-content" id="titan-tab">
+                <div class="tab-content" id="titan-tab" role="tabpanel" aria-labelledby="titan-tab-button">
                     <div class="tab-info">
                         <p><strong>Total Pieces:</strong> <span id="titan-count">0</span></p>
                     </div>
@@ -132,18 +142,22 @@
 
                 <div class="metrics-container">
                     <div class="metric-chip">
+                        <span class="material-icons">upload</span>
                         <span class="metric-label">Ingested</span>
                         <span class="metric-value" id="metricIngested">0</span>
                     </div>
                     <div class="metric-chip">
+                        <span class="material-icons">check_circle</span>
                         <span class="metric-label">Kept</span>
                         <span class="metric-value" id="metricKept">0</span>
                     </div>
                     <div class="metric-chip">
+                        <span class="material-icons">remove_circle</span>
                         <span class="metric-label">Removed</span>
                         <span class="metric-value" id="metricRemoved">0</span>
                     </div>
                     <div class="metric-chip">
+                        <span class="material-icons">content_copy</span>
                         <span class="metric-label">Duplicates</span>
                         <span class="metric-value" id="metricDuplicates">0</span>
                     </div>
@@ -165,6 +179,17 @@
         const uploadSection = document.getElementById('uploadSection');
         const downloadBtn = document.getElementById('downloadBtn');
         const uploadAnotherBtn = document.getElementById('uploadAnotherBtn');
+
+        // Accessibility announcements helper - defined early
+        function announce(message) {
+            const announcements = document.getElementById('announcements');
+            if (announcements) {
+                announcements.textContent = message;
+                setTimeout(() => {
+                    announcements.textContent = '';
+                }, 1000);
+            }
+        }
 
         uploadBox.addEventListener('click', () => fileInput.click());
 
@@ -232,10 +257,18 @@
             const formData = new FormData();
             formData.append('file', selectedFile);
 
+            // Add loading state to button
+            processBtn.disabled = true;
+            processBtn.classList.add('loading');
+            const originalText = processBtn.innerHTML;
+            processBtn.innerHTML = '<span class="spinner-small"></span> Processing...';
+
             uploadSection.style.display = 'none';
             spinner.style.display = 'block';
             hideError();
             resultsSection.style.display = 'none';
+
+            announce('Processing armor data...');
 
             try {
                 const response = await fetch('/upload', {
@@ -253,8 +286,12 @@
             } catch (error) {
                 showError(error.message);
                 uploadSection.style.display = 'block';
+                announce(`Error: ${error.message}`);
             } finally {
                 spinner.style.display = 'none';
+                processBtn.disabled = false;
+                processBtn.classList.remove('loading');
+                processBtn.innerHTML = originalText;
             }
         });
 
@@ -279,6 +316,11 @@
             document.getElementById('hunter-count').textContent = hunterData.length;
             document.getElementById('warlock-count').textContent = warlockData.length;
             document.getElementById('titan-count').textContent = titanData.length;
+
+            // Update tab badges
+            document.getElementById('hunter-badge').textContent = hunterData.length;
+            document.getElementById('warlock-badge').textContent = warlockData.length;
+            document.getElementById('titan-badge').textContent = titanData.length;
 
             // Populate each tab
             populateTable('hunter', data.preview.columns, hunterData);
@@ -480,17 +522,75 @@
         }
 
         // Tab switching functionality
+        function switchTab(tabName) {
+            // Remove active class from all tabs and buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Add active class to clicked button and corresponding content
+            const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+                activeButton.setAttribute('aria-selected', 'true');
+                activeButton.focus();
+            }
+            const activeContent = document.getElementById(`${tabName}-tab`);
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
+
+            // Announce tab change
+            const count = document.getElementById(`${tabName}-count`)?.textContent || '0';
+            announce(`${tabName.charAt(0).toUpperCase() + tabName.slice(1)} tab selected. ${count} armor pieces.`);
+        }
+
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
                 const tabName = button.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
 
-                // Remove active class from all tabs and buttons
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        // Keyboard navigation for tabs (arrow keys)
+        document.querySelectorAll('.tab-button').forEach((button, index, buttons) => {
+            button.addEventListener('keydown', (e) => {
+                let newIndex = index;
 
-                // Add active class to clicked button and corresponding content
-                button.classList.add('active');
-                document.getElementById(`${tabName}-tab`).classList.add('active');
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    newIndex = (index + 1) % buttons.length;
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    newIndex = (index - 1 + buttons.length) % buttons.length;
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    newIndex = 0;
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    newIndex = buttons.length - 1;
+                }
+
+                if (newIndex !== index) {
+                    const tabName = buttons[newIndex].getAttribute('data-tab');
+                    switchTab(tabName);
+                }
+            });
+        });
+
+        // Sticky header shadow on scroll
+        document.querySelectorAll('.table-container').forEach(container => {
+            container.addEventListener('scroll', () => {
+                const header = container.querySelector('thead');
+                if (header) {
+                    if (container.scrollTop > 0) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                }
             });
         });
 
