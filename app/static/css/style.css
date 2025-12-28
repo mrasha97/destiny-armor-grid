@@ -1,0 +1,622 @@
+/* Dark Theme Variables */
+:root {
+    --primary-color: #ED985F;
+    --primary-dark: #d87f45;
+    --primary-light: #F7B980;
+    --secondary-color: #F7B980;
+    --error-color: #ff6b6b;
+    --surface: #001F3D;
+    --background: #000814;
+    --on-primary: #001F3D;
+    --on-surface: #E6E6E6;
+    --text-primary: #E6E6E6;
+    --text-secondary: rgba(230, 230, 230, 0.7);
+    --border-color: rgba(237, 152, 95, 0.2);
+    --hover-overlay: rgba(237, 152, 95, 0.1);
+    --elevation-1: 0 2px 4px rgba(0,0,0,0.3);
+    --elevation-2: 0 4px 8px rgba(0,0,0,0.4);
+    --elevation-4: 0 8px 16px rgba(0,0,0,0.5);
+    --elevation-8: 0 16px 24px rgba(0,0,0,0.6);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--background);
+    min-height: 100vh;
+    padding: 24px;
+    color: var(--text-primary);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* Upload Section */
+.upload-section {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 32px;
+    box-shadow: var(--elevation-2);
+    margin-bottom: 24px;
+}
+
+.upload-box {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 48px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(237, 152, 95, 0.05);
+    margin-bottom: 24px;
+}
+
+.upload-box:hover,
+.upload-box.drag-over {
+    border-color: var(--primary-color);
+    background: rgba(237, 152, 95, 0.15);
+    transform: scale(1.01);
+    box-shadow: var(--elevation-1);
+}
+
+.upload-content svg {
+    color: var(--primary-color);
+    margin-bottom: 16px;
+}
+
+.upload-content h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.upload-content p {
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    font-size: 0.875rem;
+}
+
+.browse-link {
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.browse-link:hover {
+    color: var(--primary-dark);
+}
+
+.file-info {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+/* Material Buttons */
+.btn {
+    padding: 12px 24px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--elevation-2);
+}
+
+.btn:hover {
+    box-shadow: var(--elevation-4);
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    box-shadow: var(--elevation-1);
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: var(--on-primary);
+    width: 100%;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-dark);
+}
+
+.btn-success {
+    background: var(--primary-color);
+    color: var(--on-primary);
+}
+
+.btn-success:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: rgba(230, 230, 230, 0.2);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: rgba(230, 230, 230, 0.3);
+}
+
+/* Spinner */
+.spinner {
+    text-align: center;
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 48px 32px;
+    box-shadow: var(--elevation-2);
+}
+
+.spinner-ring {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    border: 6px solid rgba(237, 152, 95, 0.2);
+    border-top: 6px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Error Section */
+.error-section {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: var(--elevation-2);
+    margin-bottom: 24px;
+}
+
+.error-box {
+    background: rgba(255, 107, 107, 0.1);
+    border-left: 4px solid var(--error-color);
+    padding: 16px;
+    border-radius: 4px;
+}
+
+.error-box h3 {
+    color: var(--error-color);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.error-box p {
+    color: var(--text-primary);
+}
+
+/* Results Section */
+.results-section {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: var(--elevation-2);
+}
+
+/* Section Header with Toggle */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.toggles-container {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.stat-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toggle-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    user-select: none;
+}
+
+/* Material Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Stat Column Visibility */
+.stat-column {
+    display: none;
+}
+
+.stat-column.visible {
+    display: table-cell;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(230, 230, 230, 0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--text-secondary);
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .toggle-slider:before {
+    background-color: var(--on-primary);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(16px);
+}
+
+/* Material Tabs */
+.tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-button {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-button:hover {
+    background: var(--hover-overlay);
+    color: var(--primary-light);
+}
+
+.tab-button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-button .material-icons {
+    font-size: 18px;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-info {
+    background: rgba(237, 152, 95, 0.1);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.tab-info p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+/* Table */
+.table-container {
+    overflow-x: auto;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.data-table th {
+    background: var(--primary-color);
+    color: var(--on-primary);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+}
+
+.data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.data-table tbody tr:hover {
+    background: var(--hover-overlay);
+}
+
+/* Armor type spacer (larger) */
+.armor-type-spacer {
+    height: 16px;
+    background: transparent;
+}
+
+.armor-type-spacer td {
+    padding: 0;
+    border: none;
+}
+
+/* Archetype spacer (smaller, within armor type) */
+.archetype-spacer {
+    height: 8px;
+    background: transparent;
+}
+
+.archetype-spacer td {
+    padding: 0;
+    border: none;
+}
+
+/* Tuning stat spacer (extra small, within archetype when toggle enabled) */
+.tuning-spacer {
+    height: 4px;
+    background: transparent;
+}
+
+.tuning-spacer td {
+    padding: 0;
+    border: none;
+}
+
+/* Armor type colors (dark theme - muted with transparency) */
+.data-table tbody tr[data-armor-type="Helmet"] {
+    background-color: rgba(255, 82, 82, 0.15);
+}
+
+.data-table tbody tr[data-armor-type="Gauntlets"] {
+    background-color: rgba(76, 175, 80, 0.15);
+}
+
+.data-table tbody tr[data-armor-type="Chest Armor"] {
+    background-color: rgba(255, 235, 59, 0.15);
+}
+
+.data-table tbody tr[data-armor-type="Leg Armor"] {
+    background-color: rgba(33, 150, 243, 0.15);
+}
+
+.data-table tbody tr[data-armor-type="Hunter Cloak"] {
+    background-color: rgba(233, 30, 99, 0.15);
+}
+
+.data-table tbody tr[data-armor-type="Warlock Bond"] {
+    background-color: rgba(0, 188, 212, 0.15);
+}
+
+.data-table tbody tr[data-armor-type="Titan Mark"] {
+    background-color: rgba(156, 39, 176, 0.15);
+}
+
+.duplicate-cell {
+    background-color: rgba(247, 185, 128, 0.3) !important;
+    font-weight: 500;
+    color: var(--primary-light);
+}
+
+.exact-duplicate-cell {
+    background-color: rgba(237, 152, 95, 0.5) !important;
+    font-weight: 600;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+/* Bottom Section */
+.bottom-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+/* Compact Metrics */
+.metrics-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.metric-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(237, 152, 95, 0.15);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    font-size: 0.875rem;
+}
+
+.metric-label {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.metric-value {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Material Icons in buttons */
+.btn .material-icons {
+    font-size: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 0.875rem;
+    }
+
+    .upload-section,
+    .results-section {
+        padding: 16px;
+    }
+
+    .upload-box {
+        padding: 32px 16px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .metrics-container {
+        gap: 8px;
+    }
+
+    .metric-chip {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .tabs {
+        overflow-x: auto;
+    }
+
+    .tab-button {
+        flex-shrink: 0;
+    }
+}
