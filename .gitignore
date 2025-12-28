@@ -214,3 +214,7 @@ __marimo__/
 *.iws
 out/
 .DS_Store
+
+logs/
+*.pyc
+uploads/
